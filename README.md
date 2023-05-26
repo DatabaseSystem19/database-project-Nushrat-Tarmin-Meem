@@ -1,4 +1,4 @@
 # database-project-Nushrat-Tarmin-Meem
 database-project-Nushrat-Tarmin-Meem created by GitHub Classroom
 # Schema Design
-![schema](https://github.com/DatabaseSystem19/database-project-Nushrat-Tarmin-Meem/assets/127888834/7695fc8e-6b0e-417d-aa5c-7199721b5366)
+![Capture](https://github.com/DatabaseSystem19/database-project-Nushrat-Tarmin-Meem/assets/127888834/ae11be2f-b0ff-42d6-9fe9-96f450c13bb8)

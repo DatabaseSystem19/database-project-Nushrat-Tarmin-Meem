@@ -1,0 +1,105 @@
+set serveroutput on
+declare
+    id doctor.doctor_id%type;
+    name doctor.doctor_name%type;
+    location doctor.address%type;
+    payment doctor.fees%type;
+    begin
+    select doctor_id,doctor_name,address,fees into id,name,location,payment from doctor where doctor_id=2;
+    dbms_output.put_line('Doctor_Info   Id:' || id || '   Name:'|| name || '   Location:' || location|| '   Payment:'|| payment );
+    end;
+    /
+
+
+set serveroutput on
+declare
+    id doctor.doctor_id%type:=11;
+    category doctor.category%type:='Cardiologist';
+    name doctor.doctor_name%type:='Dr.Diana';
+    phone doctor.phone_no%type:='01893266744';
+    location doctor.address%type:='Mumbai';
+    payment doctor.fees%type:=9000;
+    begin
+    insert into doctor values(id,name,category,phone,location,payment);
+    end;
+    /
+
+
+set serveroutput on
+declare
+    cursor doctor_cursor is select * from doctor;
+    doctor_row doctor%rowtype;
+    begin
+    open doctor_cursor;
+    fetch doctor_cursor into doctor_row.doctor_id, doctor_row.doctor_name, doctor_row.category, doctor_row.phone_no,doctor_row.address, doctor_row.fees;
+    while doctor_cursor%found loop
+    dbms_output.put_line('ID:'||doctor_row.doctor_id||'  Name:'|| doctor_row.doctor_name||'  Category:'|| doctor_row.category||'  Phone:'|| doctor_row.phone_no||'  Address:'||doctor_row.address|| '  Fees:'||doctor_row.fees);
+    dbms_output.put_line('Row Number: '||doctor_cursor%rowcount);
+    fetch doctor_cursor into doctor_row.doctor_id, doctor_row.doctor_name, doctor_row.category, doctor_row.phone_no,doctor_row.address, doctor_row.fees;
+    end loop;
+    close doctor_cursor;
+    end;
+    /
+
+alter table medicine add due_payment number(20);
+select * from medicine;
+
+ set serveroutput on
+ declare
+        cursor medicine_cursor is select * from medicine;
+        medicine_row medicine%rowtype;
+        begin
+        open medicine_cursor;
+        fetch medicine_cursor into medicine_row.patient_id, medicine_row.medicine_name, medicine_row.test_package_amount, medicine_row.paid_payment, medicine_row.due_payment;
+        while medicine_cursor%found loop
+        medicine_row.due_payment := medicine_row.test_package_amount-medicine_row.paid_payment;
+        dbms_output.put_line('Patient_Id:'|| medicine_row.patient_id||'  Medicine_Name:' || medicine_row.medicine_name ||'  Test_Pack_Amount:'|| medicine_row.test_package_amount ||'  Paid:'|| medicine_row.paid_payment ||'  Due:'|| medicine_row.due_payment);
+        dbms_output.put_line('Row Number: '||medicine_cursor%rowcount);        
+        fetch medicine_cursor into medicine_row.patient_id, medicine_row.medicine_name, medicine_row.test_package_amount, medicine_row.paid_payment, medicine_row.due_payment;
+        end loop;
+        close medicine_cursor;
+        end;
+        /
+
+select * from medicine;
+
+set serveroutput on
+ declare
+        cursor medicine_cursor is select * from medicine;
+        medicine_row medicine%rowtype;
+        begin
+        open medicine_cursor;
+        fetch medicine_cursor into medicine_row.patient_id, medicine_row.medicine_name, medicine_row.test_package_amount, medicine_row.paid_payment, medicine_row.due_payment;
+        while medicine_cursor%found loop
+        update medicine set medicine.due_payment = medicine.test_package_amount-medicine.paid_payment;   
+        fetch medicine_cursor into medicine_row.patient_id, medicine_row.medicine_name, medicine_row.test_package_amount, medicine_row.paid_payment, medicine_row.due_payment;
+        end loop;
+        close medicine_cursor;
+        end;
+        /
+        select * from medicine;
+
+
+
+alter table patient add bmi number(5,2);
+select * from patient;
+
+set serveroutput on
+ declare
+        cursor patient_cursor is select * from patient;
+        patient_row patient%rowtype;
+        begin
+        open patient_cursor;
+        fetch patient_cursor into patient_row.patient_id, patient_row.patient_name, patient_row.doctor_id, patient_row.age, patient_row.height_meter, patient_row.weight_kg ,patient_row.bmi;
+        while patient_cursor%found loop
+        update patient set patient.bmi = patient.weight_kg/(patient.height_meter*patient.height_meter);   
+        fetch patient_cursor into patient_row.patient_id, patient_row.patient_name, patient_row.doctor_id, patient_row.age, patient_row.height_meter, patient_row.weight_kg ,patient_row.bmi;
+        end loop;
+        close patient_cursor;
+        end;
+        /
+        select * from patient;
+
+select patient_name,bmi as Perfect_BMI_Rate from patient where bmi>=18.0 and bmi<=24.0;
+
+

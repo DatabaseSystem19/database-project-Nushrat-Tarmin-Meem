@@ -1,3 +1,4 @@
+---PL/SQL variable declaration and printing value
 set serveroutput on
 declare
     id doctor.doctor_id%type;
@@ -11,6 +12,7 @@ declare
     /
 
 
+---Insertion and setting of default value
 set serveroutput on
 declare
     id doctor.doctor_id%type:=11;
@@ -24,7 +26,7 @@ declare
     end;
     /
 
-
+---Cursor use and Row Count
 set serveroutput on
 declare
     cursor doctor_cursor is select * from doctor;
@@ -44,6 +46,7 @@ declare
 alter table medicine add due_payment number(20);
 select * from medicine;
 
+---use of cursor and loop
  set serveroutput on
  declare
         cursor medicine_cursor is select * from medicine;
@@ -151,7 +154,7 @@ set serveroutput on
         /
 
 
---array and loop
+---array and loop
 set serveroutput on
 declare
    counter number := 1;
@@ -178,7 +181,7 @@ end;
 
 
 
---if elseif
+---if elsif
 set serveroutput on
 declare
    counter number := 1;
@@ -206,7 +209,7 @@ end;
 
 
 
---function
+---function
 set serveroutput on
 create function fun(id in varchar) return varchar AS
 value doctor.doctor_name%type;

@@ -103,3 +103,49 @@ set serveroutput on
 select patient_name,bmi as Perfect_BMI_Rate from patient where bmi>=18.0 and bmi<=24.0;
 
 
+set serveroutput on
+declare
+    cursor doctor_cursor is select * from doctor;
+    doctor_row doctor%rowtype;
+    begin
+    open doctor_cursor;
+    fetch doctor_cursor into doctor_row.doctor_id, doctor_row.doctor_name, doctor_row.category, doctor_row.phone_no,doctor_row.address, doctor_row.fees;
+    while doctor_cursor%found loop
+    if doctor_row.doctor_id=(select doctor_id from patient where patient_id in (select patient_id from medicine where due_payment>1000))
+    then
+	dbms_output.put_line('Name:'|| doctor_row.doctor_name);
+    end if;
+    fetch doctor_cursor into doctor_row.doctor_id, doctor_row.doctor_name, doctor_row.category, doctor_row.phone_no,doctor_row.address, doctor_row.fees;
+    end loop;
+    close doctor_cursor;
+    end;
+    /
+
+
+select * from medicine;
+---select doctor_name from doctor where doctor_id in(select doctor_id from patient where patient_id in (select patient_id from medicine where due_payment>1000));
+
+---lab_test
+set serveroutput on
+ declare
+        id doctor.doctor_id%type;
+        name doctor.doctor_name%type;
+        cursor medicine_cursor is select * from medicine;
+        medicine_row medicine%rowtype;
+        begin
+        open medicine_cursor;
+        fetch medicine_cursor into medicine_row.patient_id, medicine_row.medicine_name, medicine_row.test_package_amount, medicine_row.paid_payment, medicine_row.due_payment;
+        while medicine_cursor%found loop
+        if  medicine_row.due_payment>1500
+        then
+        --dbms_output.put_line('Patient_ID:'|| medicine_row.patient_id);        
+        select doctor_id into id from patient where patient_id=medicine_row.patient_id;
+        --dbms_output.put_line('Doctor_ID:'|| id);
+        select doctor_name into name from doctor where doctor_id=id;
+        dbms_output.put_line('Doctor_Name:'|| name);          
+        end if;
+        fetch medicine_cursor into medicine_row.patient_id, medicine_row.medicine_name, medicine_row.test_package_amount, medicine_row.paid_payment, medicine_row.due_payment;
+        end loop;
+        close medicine_cursor;
+        end;
+        /
